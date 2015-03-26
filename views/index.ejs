@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="favicon.ico">
+
+    <title>Weather News App</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="stylesheets/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" type="text/css" href="stylesheets/weather-app.css">
+    <!-- Custom Fonts -->
+    <link href="font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+</head>
+<body ng-app="weatherNews" ng-controller="MainCtrl">
+
+
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="index.html">Mario Garcia</a>
+            </div>
+            <div id="navbar" class="collapse navbar-collapse">
+                <ul class="nav navbar-nav">
+                    <li><a href="/">Home</a></li>
+                    <li><a href="personal.html">About me</a></li>
+                    <li><a href="weather.html">Weather App</a></li>
+                </ul>
+            </div><!--/.nav-collapse -->
+        </div>
+    </nav>
+
+
+    <div class="container">
+
+        <ui-view></ui-view>
+
+        <script type="text/ng-template" id="/home.html">
+
+            <h1 class="page-header">{{test}}</h1>
+
+            <div class="row">
+                <div class="col-lg-6">
+                    <h2>Enter a Utah city below!</h2>
+
+                    <br>
+
+                    <form role="form">
+                        <div class="input-group">
+                            <input type="text" class="form-control" id="city-input" placeholder="Enter a UT City...">
+                                      <span class="input-group-btn">
+                                        <button class="btn btn-default" type="button" id="city-btn">Go!</button>
+                                      </span>
+                        </div><!-- /input-group -->
+                        <div id="suggestions">
+                        </div>
+
+                        <br>
+
+                        <div class="form-group">
+                            <label>You chose:</label>
+                            <textarea class="form-control" rows="3" id="chosen-city"></textarea>
+                        </div>
+                    </form>
+                </div><!-- /.col-lg-6 -->
+                <div class="col-lg-6">
+                    <h2>Current Weather in that city is</h2>
+
+                    <br>
+
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h3 class="panel-title" id="weather-pnl-title">Choose a City!</h3>
+                        </div>
+                        <div class="panel-body" id="weather-pnl-body">
+                        </div>
+                    </div>
+                </div><!-- /.col-lg-6 -->
+            </div><!-- /.row -->
+
+            <div class="row">
+                <div class="col-lg-6">
+                    <h2>Post Something:</h2>
+                    <form role="form" ng-submit="addPost()">
+                        <div class="form-group">
+                            <input type="text" class="form-control" id="name-input" ng-model="formName" placeholder="Enter your name">
+
+                            <br>
+
+                            <input type="text" class="form-control" id="title-input" ng-model="formTitle" placeholder="Give your post a title">
+
+                            <br>
+
+                            <textarea class="form-control" rows="5" ng-model="formContent" id="comment" placeholder="Tell us everything..."></textarea>
+
+                        </div><!-- /input-group -->
+
+                        <button class="btn btn-success btn-lg btn-default float-right" type="submit" id="post-btn">Post</button>
+
+                    </form>
+
+                    <br>
+
+                    <h2 class="page-header">Posts</h2>
+
+                    <!--<button class="btn btn-info btn-lg float-right" type="button" id="comments-btn">See comments</button>-->
+
+                    <div id="comments" ng-repeat="post in posts | orderBy: '-upvotes'">
+                        <h4>{{post.title}}</h4>
+                        <blockquote class="quote"><p>"{{post.content}}"</p></blockquote>
+                        <h4 class="inline"><i class="fa fa-thumbs-up" ng-click="incrementUpvotes(post)"></i> {{post.upvotes}} </h4>
+                        <h4 class="inline"><i class="fa fa-comment" > {{post.comments.length}}</i></h4>
+                        <h4 class="inline"><i class="fa fa-user"></i> {{post.name}}</h4>
+                        <a class="float-right link" href="#/posts/{{post._id}}">Comment</a>
+                    </div>
+
+                </div><!-- /.col-lg-6 -->
+                <div class="col-lg-6">
+                    <h3 id="comment-posted"></h3>
+                    <h4 id="post-status"></h4>
+                </div>
+            </div><!-- /.row -->
+        </script>
+
+        <script type="text/ng-template" id="/posts.html">
+
+            <h3 class="page-header">{{post.title}}</h3>
+
+            <h4>{{post.content}}</h4>
+
+            <br>
+
+            <h4>Comments:</h4>
+
+            <br>
+
+            <div ng-repeat="comment in post.comments | orderBy:'-upvotes'">
+                <blockquote class="quote"><p>"{{comment.body}}"</p></blockquote>
+                <h4><i class="fa fa-thumbs-up" ng-click="incrementUpvotes(comment)"></i> {{comment.upvotes}} </h4>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <form ng-submit="addComment()" style="margin-top:30px;">
+                        <h3>Add a new comment</h3>
+
+                        <div class="form-group">
+                            <textarea class="form-control" rows="3" placeholder="Comment" ng-model="body"></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-success btn-lg btn-default float-right">Comment</button>
+                    </form>
+                </div>
+            </div>
+
+        </script>
+
+    </div><!-- /.container -->
+
+
+
+    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.19/angular.min.js"></script>
+    <script src="http://angular-ui.github.io/ui-router/release/angular-ui-router.js"></script>
+    <script src="javascripts/angular-app.js"></script>
+</body>
+</html>

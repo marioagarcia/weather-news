@@ -1,0 +1,28 @@
+body {
+  padding-top: 50px;
+    padding-bottom: 50px;
+}
+.first-header {
+  padding-top: 40px;
+}
+
+.float-right {
+    float: right;
+}
+
+.hidden {
+    visibility: hidden;
+}
+
+.quote {
+    margin-bottom: 5px;
+}
+
+.inline {
+    display: inline-block;
+}
+
+.link {
+    margin: 10px 0 10px 0;
+    font-size: 18px;
+}
